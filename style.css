@@ -1,0 +1,284 @@
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f5f3e7;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+
+#maison {
+    margin: 40px auto;
+    width: 220px;
+    height: 300px;
+    background: #d2b48c url('maison.png') center/cover no-repeat;
+    border-radius: 20px 20px 40px 40px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#porte {
+        position: absolute;
+        /* position exacte par défaut : centré mais on ajuste avec media queries si besoin */
+        width: 80px;
+    height: 120px;
+    background: #a0522d; /* couleur plus vive */
+    border: 4px solid #fff176; /* bordure dorée */
+    border-radius: 10px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4); /* ombre plus forte */
+    transition: transform 0.7s cubic-bezier(.68,-0.55,.27,1.55), box-shadow 0.3s;
+}
+
+#porte.zoom {
+    transform: scale(3) translateY(40px);
+    z-index: 2;
+}
+#calendrier {
+    margin: 30px auto;
+    width: 350px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-gap: 12px;
+    max-width: 92vw;
+}
+.case {
+    background: #fffbe6;
+    border: 2px solid #d2b48c;
+    border-radius: 8px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.case.ouverte {
+    background: #ffe4b5;
+    color: #8b5c2a;
+    font-weight: bold;
+}
+.message {
+    margin-top: 20px;
+    font-size: 1.1em;
+    color: #6d4c1b;
+}
+
+/* Image intérieur centrée et responsive */
+.interieur {
+    display: block;
+    margin: 0 auto 18px auto;
+    width: 100%;
+    max-width: 350px;
+    height: auto;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+/* wrapper qui contient l'image et l'overlay des cases */
+.interior-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto 18px auto;
+}
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* laisser pointer-events aux .case */
+}
+/* règles pour les cases positionnées sur l'image (overlay) */
+.overlay .case {
+    position: absolute;
+    transform: translate(-50%, -50%) rotateY(0deg);
+    transform-origin: 18% 50%; /* charnière côté gauche */
+    backface-visibility: hidden;
+    pointer-events: auto;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes doorOpen {
+    0% { transform: translate(-50%, -50%) rotateY(0deg); }
+    60% { transform: translate(-50%, -50%) rotateY(-65deg); }
+    100% { transform: translate(-50%, -50%) rotateY(-75deg); }
+}
+.case.opening {
+    animation: doorOpen 500ms cubic-bezier(.2,.8,.2,1) forwards;
+}
+
+/* Control background alpha of cases without affecting text or borders */
+:root {
+    --case-bg-rgb: 255,251,230; /* default background RGB */
+    --case-bg-alpha: 0.9;      /* alpha for closed cases (0..1) */
+    --case-open-rgb: 255,228,181; /* opened case background RGB */
+    --case-open-alpha: 1;      /* opened alpha */
+}
+.case {
+    background-color: rgba(var(--case-bg-rgb), var(--case-bg-alpha));
+    transition: background-color .15s;
+}
+.case.ouverte {
+    background-color: rgba(var(--case-open-rgb), var(--case-open-alpha));
+    transform: translate(-50%, -50%) rotateY(-75deg);
+}
+
+/* animation d'ouverture (effet "porte qui s'ouvre" / flip) */
+/* ancienne animation supprimée (remplacée par doorOpen) */
+
+/* Panel d'édition */
+#editorPanel {
+    position: fixed;
+    right: 12px;
+    top: 12px;
+    background: rgba(255,255,255,0.95);
+    border: 1px solid #e6d6c2;
+    padding: 8px 10px;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    z-index: 9999;
+    font-size: 14px;
+}
+#editorPanel input[type="number"] { vertical-align:middle; }
+#editorPanel button { margin-right:6px; margin-bottom:4px; }
+@media (max-width:600px){
+    #editorPanel { right:8px; left:8px; top:auto; bottom:8px; display:flex; flex-wrap:wrap; gap:6px; }
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    #maison {
+        width: 160px;
+        height: 220px;
+        margin: 24px auto;
+        border-radius: 14px;
+    }
+    #porte {
+        left: 50%;
+        top: 58%;
+        width: 64px;
+        height: 96px;
+        font-size: 1rem;
+    }
+    #calendrier {
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: 10px;
+        width: 92vw;
+    }
+    .case {
+        width: 64px;
+        height: 64px;
+        font-size: 1.1rem;
+    }
+    .message { font-size: 1rem; }
+}
+
+@media (max-width: 360px) {
+    #maison { width: 140px; height: 200px; }
+    #porte { width: 56px; height: 84px; }
+    #calendrier { grid-template-columns: repeat(3, 1fr); }
+    .case { width: 56px; height: 56px; }
+}
+
+/* Fullscreen interior image on small devices */
+@media (max-width: 480px) {
+    .interior-wrapper {
+        max-width: none;
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+    }
+    .interieur {
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover;
+        border-radius: 0;
+    }
+    .overlay { height: 100vh; }
+    .case { width: 56px; height: 56px; }
+}
+
+/* Fullscreen house (maison) on small devices */
+.fullscreen-house {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    box-sizing: border-box;
+    border-radius: 0 !important;
+    background-size: cover !important;
+    background-position: center center !important;
+    z-index: 998;
+}
+
+/* Ensure the door stays above the full-bleed house */
+.fullscreen-house #porte { z-index: 999; }
+/* Taille et position responsive de la porte en mode fullscreen (mobile) */
+.fullscreen-house #porte {
+    left: 50%;
+    top: 58%;
+    width: clamp(64px, 18vw, 140px);
+    height: auto;
+    aspect-ratio: 2/3;
+    transform: translate(-50%, -50%);
+    font-size: clamp(0.9rem, 3.6vw, 1.2rem);
+}
+
+/* Full-bleed helper (appliqué par JS pour coller l'image aux bords du téléphone) */
+html, body { height: 100%; }
+.interior-wrapper.fullscreen {
+    position: fixed;
+    inset: 0; /* top:0; right:0; bottom:0; left:0; */
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    box-sizing: border-box;
+    z-index: 9998;
+    background: #000; /* évite liserés si image ratio différent */
+}
+.interior-wrapper.fullscreen .interieur {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0;
+}
+.interior-wrapper.fullscreen .overlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* small tweak to ensure cases remain clickable on fullscreen */
+.interior-wrapper.fullscreen .overlay .case { pointer-events: auto; }
+
+/* Classe utilitaire pour masquer un élément */
+.hidden {
+    display: none;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+/* Responsive */
+@media(max-width:480px){
+    .house-container { width:260px; height:390px; }
+    .door { width:30px; height:40px; font-size:14px; }
+    h1 { font-size:1.5rem; }
+}
