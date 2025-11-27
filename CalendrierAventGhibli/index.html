@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calendrier Ghibli</title>
+
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+</head>
+<body>
+<div id="maison">
+    <div id="porte">Clique sur la porte</div>
+</div>
+<!-- Outils d'édition : réorganisation, placement manuel, réinitialisation, opacité -->
+<div id="editorPanel" aria-hidden="false">
+    <button id="randomizeBtn" title="Réorganiser aléatoirement">Réorganiser</button>
+    <button id="importPositionsBtn" title="Importer positions depuis JSON">Importer positions</button>
+    <button id="placementToggle">Mode placement</button>
+    <label for="placementCase">Case :</label>
+    <input id="placementCase" type="number" min="1" max="24" value="1" style="width:60px">
+    <button id="clearPositionsBtn" title="Supprimer positions">Supprimer positions</button>
+    <button id="resetOpenedBtn" title="Réinitialiser ouvertures">Réinitialiser ouvertures</button>
+    <button id="resetBtn" title="Réinitialiser tout">Réinitialiser tout</button>
+    <button id="moveDoorBtn" title="Activer le déplacement de la porte">Déplacer porte</button>
+    <label for="opacityRange">Opacité :</label>
+    <input id="opacityRange" type="range" min="0.2" max="1" step="0.05" value="0.9">
+    <span id="opacityVal">0.9</span>
+    <label for="doorSizeRange">Taille porte :</label>
+    <input id="doorSizeRange" type="range" min="50" max="200" step="5" value="100">
+    <span id="doorSizeVal">100%</span>
+</div>
+
+<div id="calendrier" style="display:none;"></div>
+<script src="script.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+    .then(() => console.log('Service Worker Registered'))
+    .catch(e => console.warn('SW register failed', e));
+}
+</script>
+</body>
+</html>
